@@ -1,0 +1,113 @@
+.project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--dur-med) var(--ease-out), border-color var(--dur-med) var(--ease-out), box-shadow var(--dur-med) var(--ease-out);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-500);
+  box-shadow: var(--shadow-elev);
+}
+
+.project-card__featured {
+  position: absolute;
+  top: var(--sp-3);
+  inset-inline-end: var(--sp-3);
+  z-index: 2;
+  background: var(--grad-accent);
+  color: #0A0D14;
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xs);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.project-card__image {
+  aspect-ratio: 16 / 10;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+
+.project-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.project-card:hover .project-card__image img {
+  transform: scale(1.04);
+}
+
+.project-card__body {
+  padding: var(--sp-5) var(--sp-5) 0;
+  flex: 1;
+}
+
+.project-card__title {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.project-card__desc {
+  margin-top: var(--sp-2);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-normal);
+}
+
+.project-card__tags {
+  margin-top: var(--sp-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.project-card__actions {
+  display: flex;
+  border-top: 1px solid var(--border-soft);
+  margin-top: var(--sp-5);
+}
+
+.project-card__action {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--sp-3) var(--sp-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--text-2);
+  border-inline-end: 1px solid var(--border-soft);
+  background: transparent;
+  border-top: none;
+  border-bottom: none;
+  border-start-start-radius: 0;
+}
+
+.project-card__action:last-child {
+  border-inline-end: none;
+}
+
+.project-card__action:hover {
+  color: var(--accent-400);
+  background: var(--bg-2);
+}
+
+.project-card__action--disabled {
+  color: var(--text-3);
+  cursor: default;
+}
+
+.project-card__action--disabled:hover {
+  background: transparent;
+  color: var(--text-3);
+}

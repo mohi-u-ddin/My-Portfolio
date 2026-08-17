@@ -1,0 +1,103 @@
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  padding-inline-start: var(--sp-6);
+  border-inline-start: 1px solid var(--border);
+}
+
+[dir="rtl"] .timeline {
+  padding-inline-start: 0;
+  padding-inline-end: var(--sp-6);
+  border-inline-start: none;
+  border-inline-end: 1px solid var(--border);
+}
+
+.timeline__item {
+  position: relative;
+}
+
+.timeline__marker {
+  position: absolute;
+  top: 6px;
+  inset-inline-start: calc(-1 * var(--sp-6) - 5px);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-500);
+  box-shadow: 0 0 0 4px var(--bg-0), 0 0 0 5px var(--border);
+}
+
+[dir="rtl"] .timeline__marker {
+  inset-inline-start: auto;
+  inset-inline-end: calc(-1 * var(--sp-6) - 5px);
+}
+
+.timeline__card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-5);
+}
+
+.timeline__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.timeline__position {
+  font-size: var(--fs-md);
+  font-weight: 600;
+}
+
+.timeline__company {
+  margin-top: 4px;
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.timeline__dates {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--accent-400);
+  background: var(--bg-2);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+.timeline__bullets {
+  margin-top: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timeline__bullets li {
+  position: relative;
+  padding-inline-start: var(--sp-4);
+  color: var(--text-2);
+  font-size: var(--fs-sm);
+}
+
+.timeline__bullets li::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: 0;
+  top: 9px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-500);
+}
+
+.timeline__tags {
+  margin-top: var(--sp-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

@@ -1,0 +1,110 @@
+/*
+  Design tokens for the portfolio.
+  Aesthetic: "engineering console" — a calm, technical dark surface with a
+  single restrained blue/violet accent, monospace details for structure
+  (labels, code), Space Grotesk for display type, Inter for body copy.
+*/
+
+:root {
+  /* ---- Type ---- */
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --font-urdu: "Noto Nastaliq Urdu", "Inter", serif;
+
+  --fs-2xs: 0.6875rem;
+  --fs-xs: 0.8125rem;
+  --fs-sm: 0.9375rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+  --fs-3xl: 3rem;
+  --fs-4xl: 3.75rem;
+
+  --lh-tight: 1.1;
+  --lh-snug: 1.35;
+  --lh-normal: 1.6;
+
+  /* ---- Spacing scale ---- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
+
+  /* ---- Radius / motion ---- */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 999px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur-med: 320ms;
+
+  --container-w: 1180px;
+
+  /* ---- Accent ramp (shared both themes) ---- */
+  --accent-500: #6C8CFF;
+  --accent-600: #5B76F0;
+  --accent-400: #8CA5FF;
+  --accent-glow: rgba(108, 140, 255, 0.35);
+  --violet-500: #9B7CF6;
+
+  --success-500: #34D399;
+  --error-500: #F87171;
+  --warning-500: #FBBF6B;
+}
+
+/* ---------- Dark theme (default) ---------- */
+:root,
+[data-theme="dark"] {
+  --bg-0: #090B12;
+  --bg-1: #0E1119;
+  --bg-2: #141826;
+  --bg-3: #1B2033;
+  --surface: #12151F;
+  --surface-raised: #171B29;
+  --border: #262C40;
+  --border-soft: #1D2233;
+
+  --text-1: #EDEFF7;
+  --text-2: #A9AFC4;
+  --text-3: #6B7186;
+
+  --code-bg: #0C0E17;
+  --code-border: #232A42;
+
+  --shadow-elev: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+  --grad-accent: linear-gradient(135deg, var(--accent-500) 0%, var(--violet-500) 100%);
+  --grad-surface: linear-gradient(180deg, rgba(108,140,255,0.06) 0%, rgba(108,140,255,0) 60%);
+}
+
+/* ---------- Light theme ---------- */
+[data-theme="light"] {
+  --bg-0: #F6F7FB;
+  --bg-1: #FFFFFF;
+  --bg-2: #EFF1F8;
+  --bg-3: #E6E9F4;
+  --surface: #FFFFFF;
+  --surface-raised: #FFFFFF;
+  --border: #E1E4F0;
+  --border-soft: #ECEEF7;
+
+  --text-1: #10131C;
+  --text-2: #4B5168;
+  --text-3: #848AA0;
+
+  --code-bg: #0E1119;
+  --code-border: #262C40;
+
+  --shadow-elev: 0 20px 45px -20px rgba(30, 40, 80, 0.18);
+  --grad-accent: linear-gradient(135deg, var(--accent-600) 0%, var(--violet-500) 100%);
+  --grad-surface: linear-gradient(180deg, rgba(91,118,240,0.05) 0%, rgba(91,118,240,0) 60%);
+}
