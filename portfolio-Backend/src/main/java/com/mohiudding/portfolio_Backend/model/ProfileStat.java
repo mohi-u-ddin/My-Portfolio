@@ -16,7 +16,7 @@ public class ProfileStat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "stat_value", nullable = false, length = 50)
     private String value;
 
     @Column(nullable = false, length = 100)

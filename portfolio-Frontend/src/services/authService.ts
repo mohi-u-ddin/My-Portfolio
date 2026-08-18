@@ -66,6 +66,17 @@ export const authService = {
     return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
   },
 
+  async changePassword(oldPassword: string, newPassword: string): Promise<void> {
+    if (USE_MOCKS) {
+      if (oldPassword !== MOCK_ADMIN.password) {
+        throw new ApiError("Current password does not match.", 400);
+      }
+      MOCK_ADMIN.password = newPassword;
+      return mockDelay(undefined, 500);
+    }
+    return api.put<void>("/users/password", { oldPassword, newPassword }, { auth: true });
+  },
+
   isAuthenticated(): boolean {
     return Boolean(this.getToken());
   },

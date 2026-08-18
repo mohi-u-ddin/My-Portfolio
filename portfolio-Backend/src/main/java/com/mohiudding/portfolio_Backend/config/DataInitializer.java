@@ -1,10 +1,13 @@
 package com.mohiudding.portfolio_Backend.config;
 
 import com.mohiudding.portfolio_Backend.model.Skill;
+import com.mohiudding.portfolio_Backend.model.User;
 import com.mohiudding.portfolio_Backend.repository.SkillRepository;
+import com.mohiudding.portfolio_Backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,9 +18,12 @@ import java.util.List;
 public class DataInitializer implements CommandLineRunner {
 
     private final SkillRepository skillRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
+        // 1. Seed Skills if database is empty
         if (skillRepository.count() == 0) {
             log.info("Seeding initial Skills data into database...");
 
@@ -42,6 +48,21 @@ public class DataInitializer implements CommandLineRunner {
 
             skillRepository.saveAll(initialSkills);
             log.info("Successfully seeded {} skills.", initialSkills.size());
+        }
+
+        // 2. Seed initial Admin User if not present
+        if (userRepository.count() == 0) {
+            log.info("Seeding default Admin user...");
+
+            User admin = User.builder()
+                    .name("Mohi Ud Din")
+                    .email("admin@mohiuddin.dev")
+                    .password(passwordEncoder.encode("admin123"))
+                    .role("admin")
+                    .build();
+
+            userRepository.save(admin);
+            log.info("Default Admin user created with email: {}", admin.getEmail());
         }
     }
 }

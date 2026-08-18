@@ -1,8 +1,5 @@
 package com.mohiudding.portfolio_Backend.dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
 
 @Getter
@@ -12,17 +9,18 @@ import lombok.*;
 @Builder
 public class LoginResponse {
 
-
     private String token;
+    private UserDto user;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String name;
-
-    private String email;
-
-    private String role;
-
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UserDto {
+        private Long id;
+        private String name;
+        private String email;
+        private String role;
+    }
 }

@@ -31,12 +31,18 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 # Environment & Local Config
-.env.local
-.env.*.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env
+.env.*
+!.env.example
 *.local
+application-local.properties
+application-secret.properties
+application-dev.properties
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
 
 # ------------------------------------------------------------------------------
 # Backend / Java & Maven
