@@ -609,7 +609,7 @@ Services reside in `com.mohiudding.portfolio_Backend.service` and contain busine
 | `PUT` | `/api/users/profile` | Update admin name & email | **Auth Required** | `User` (`name`, `email`) | Updated `User` |
 | `PUT` | `/api/users/password` | Change admin password | **Auth Required** | Password change payload | `ApiResponse` (`success: true`) |
 
----
+--- 
 
 ### 3. `SkillController` (`@RequestMapping("/api/skills")`)
 * **Purpose:** Publicly serves skills list and provides authenticated CRUD operations.

@@ -1,9 +1,6 @@
 import { useRef, useState, type MouseEvent } from "react";
 import "./CodeCard.css";
 
-// The hero's signature element: a floating "code window" styled like an
-// IDE tab, showing the Spring Boot controller that would back this very
-// portfolio. Reacts subtly to pointer movement for a sense of depth.
 export function CodeCard() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });

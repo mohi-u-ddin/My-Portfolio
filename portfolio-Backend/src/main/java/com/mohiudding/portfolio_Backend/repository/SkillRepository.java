@@ -12,4 +12,6 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     List<Skill> findByCategoryIgnoreCase(String category);
 
     List<Skill> findByNameContainingIgnoreCase(String name);
+
+    List<Skill> findAllByOrderByIdAsc();
 }

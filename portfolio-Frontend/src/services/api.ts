@@ -1,11 +1,5 @@
-// Central HTTP client. Every service module goes through here so that
-// swapping mock data for the real Spring Boot API later means changing
-// this file (and USE_MOCKS), never the UI components.
-
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
 
-// While the Spring Boot backend doesn't exist yet, services fall back to
-// mock data. Flip VITE_USE_MOCKS=false once real endpoints are live.
 export const USE_MOCKS = import.meta.env.VITE_USE_MOCKS !== "false";
 
 export class ApiError extends Error {
@@ -54,7 +48,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
       const body = await response.json();
       if (body?.message) message = body.message;
     } catch {
-      /* ignore parse errors */
     }
     throw new ApiError(message, response.status);
   }
@@ -63,8 +56,6 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   return (await response.json()) as T;
 }
 
-// Simulates network latency for a believable mock-data experience
-// (loading states, skeletons, etc. actually get exercised in dev).
 export function mockDelay<T>(value: T, ms = 500): Promise<T> {
   return new Promise((resolve) => setTimeout(() => resolve(value), ms));
 }

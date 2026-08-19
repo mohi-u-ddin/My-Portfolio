@@ -1,12 +1,4 @@
-/*
-  Design tokens for the portfolio.
-  Aesthetic: "engineering console" — a calm, technical dark surface with a
-  single restrained blue/violet accent, monospace details for structure
-  (labels, code), Space Grotesk for display type, Inter for body copy.
-*/
-
 :root {
-  /* ---- Type ---- */
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
@@ -27,7 +19,6 @@
   --lh-snug: 1.35;
   --lh-normal: 1.6;
 
-  /* ---- Spacing scale ---- */
   --sp-1: 4px;
   --sp-2: 8px;
   --sp-3: 12px;
@@ -39,7 +30,6 @@
   --sp-9: 96px;
   --sp-10: 128px;
 
-  /* ---- Radius / motion ---- */
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
@@ -50,7 +40,6 @@
 
   --container-w: 1180px;
 
-  /* ---- Accent ramp (shared both themes) ---- */
   --accent-500: #6C8CFF;
   --accent-600: #5B76F0;
   --accent-400: #8CA5FF;
@@ -62,7 +51,6 @@
   --warning-500: #FBBF6B;
 }
 
-/* ---------- Dark theme (default) ---------- */
 :root,
 [data-theme="dark"] {
   --bg-0: #090B12;
@@ -86,7 +74,6 @@
   --grad-surface: linear-gradient(180deg, rgba(108,140,255,0.06) 0%, rgba(108,140,255,0) 60%);
 }
 
-/* ---------- Light theme ---------- */
 [data-theme="light"] {
   --bg-0: #F6F7FB;
   --bg-1: #FFFFFF;

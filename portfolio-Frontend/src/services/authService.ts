@@ -4,8 +4,6 @@ import type { AdminUser } from "../types";
 const TOKEN_KEY = "auth_token";
 const USER_KEY = "auth_user";
 
-// Mock admin used only for local frontend development.
-// Real authentication (hashing, sessions, JWT signing) happens in Spring Security.
 const MOCK_ADMIN = {
   email: "admin@mohiuddin.dev",
   password: "admin123",
@@ -47,7 +45,6 @@ export const authService = {
       try {
         await api.post("/auth/logout", undefined, { auth: true });
       } catch {
-        /* best-effort logout */
       }
     }
   },

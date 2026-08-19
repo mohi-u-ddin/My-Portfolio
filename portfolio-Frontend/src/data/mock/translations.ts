@@ -1,6 +1,5 @@
 import type { TranslationEntry } from "../../types";
 
-// Mirrors src/i18n content in tabular form for the Admin > Translations screen.
 export const mockTranslations: TranslationEntry[] = [
   { key: "nav.home", en: "Home", ur: "ہوم" },
   { key: "nav.about", en: "About", ur: "میرے بارے میں" },

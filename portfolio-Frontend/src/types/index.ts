@@ -1,13 +1,10 @@
-// ---------- Shared domain types ----------
-// These mirror the shape the future Spring Boot REST API is expected to return.
-
 export type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
 export interface Skill {
   id: number;
   name: string;
   category: "Backend" | "Database" | "Frontend" | "Tools" | string;
-  icon: string; // icon key, resolved by <SkillIcon />
+  icon: string;
   level: SkillLevel;
   yearsOfExperience?: number;
 }
@@ -21,7 +18,7 @@ export interface Project {
   githubUrl?: string;
   liveUrl?: string;
   featured: boolean;
-  date: string; // ISO date
+  date: string;
 }
 
 export interface Experience {
@@ -30,7 +27,7 @@ export interface Experience {
   position: string;
   location: string;
   startDate: string;
-  endDate: string | null; // null = present
+  endDate: string | null;
   description: string[];
   technologies: string[];
 }
@@ -104,7 +101,6 @@ export interface AdminUser {
   role: "admin";
 }
 
-// ---------- Generic API envelope ----------
 export interface ApiError {
   message: string;
   status?: number;

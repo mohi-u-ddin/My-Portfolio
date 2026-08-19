@@ -27,7 +27,7 @@ export function AdminDashboard() {
       <div className="admin-page__head">
         <div>
           <h1>{t.admin.dashboard}</h1>
-          <p>Overview of your portfolio content — powered by mock data until the Spring Boot API is live.</p>
+          <p>Overview of your portfolio content.</p>
         </div>
       </div>
 

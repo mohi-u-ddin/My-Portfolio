@@ -19,35 +19,30 @@ public class UserController {
 
     private final UserService userService;
 
-    // GET /api/users/profile - Get admin user profile
     @GetMapping("/profile")
     public ResponseEntity<User> getAdminProfile() {
         User admin = userService.getAdminUser();
         return ResponseEntity.ok(admin);
     }
 
-    // GET /api/users/{id} - Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
-    // PUT /api/users/profile - Update admin profile (name and email)
     @PutMapping("/profile")
     public ResponseEntity<User> updateProfile(@Valid @RequestBody UpdateProfileRequest request) {
         User updated = userService.updateAdmin(request.getName(), request.getEmail());
         return ResponseEntity.ok(updated);
     }
 
-    // PUT /api/users/password - Change admin password
     @PutMapping("/password")
     public ResponseEntity<ApiResponse<Void>> changePassword(@Valid @RequestBody PasswordChangeRequest request) {
         userService.changePassword(request.getOldPassword(), request.getNewPassword());
         return ResponseEntity.ok(ApiResponse.success("Password updated successfully"));
     }
 
-    // POST /api/users/authenticate - Authenticate user credentials
     @PostMapping("/authenticate")
     public ResponseEntity<User> authenticate(@Valid @RequestBody LoginRequest request) {
         User authenticated = userService.authenticate(request);

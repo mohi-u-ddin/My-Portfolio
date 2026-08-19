@@ -8,8 +8,6 @@ interface UseAsyncDataResult<T> {
   reload: () => void;
 }
 
-// Generic data-fetching hook that maps a service call into the
-// loading / success / empty / error states every API-driven section needs.
 export function useAsyncData<T>(
   fetcher: () => Promise<T>,
   options: { isEmpty?: (data: T) => boolean; deps?: unknown[] } = {}
@@ -41,7 +39,6 @@ export function useAsyncData<T>(
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloadKey, ...deps]);
 
   useEffect(() => load(), [load]);

@@ -34,13 +34,13 @@ public class Experience {
     @Column(name = "end_date", length = 20)
     private String endDate;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "experience_descriptions", joinColumns = @JoinColumn(name = "experience_id"))
     @Column(name = "description", columnDefinition = "TEXT")
     @Builder.Default
     private List<String> description = new ArrayList<>();
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "experience_technologies", joinColumns = @JoinColumn(name = "experience_id"))
     @Column(name = "technology")
     @Builder.Default

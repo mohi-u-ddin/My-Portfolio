@@ -37,7 +37,6 @@ export function AdminLogin() {
       await login({ email, password, rememberMe });
       navigate("/admin", { replace: true });
     } catch {
-      /* error surfaced via context */
     }
   }
 

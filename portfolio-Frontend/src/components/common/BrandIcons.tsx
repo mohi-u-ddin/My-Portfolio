@@ -1,7 +1,3 @@
-// lucide-react no longer ships trademarked brand marks, so these two
-// commonly-needed icons (GitHub, LinkedIn) are provided as lightweight
-// inline SVGs that match lucide's 24x24 / stroke-friendly sizing.
-
 interface BrandIconProps {
   size?: number;
   strokeWidth?: number;

@@ -31,7 +31,7 @@ public class Project {
     @Column(length = 255)
     private String image;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "project_technologies", joinColumns = @JoinColumn(name = "project_id"))
     @Column(name = "technology")
     @Builder.Default

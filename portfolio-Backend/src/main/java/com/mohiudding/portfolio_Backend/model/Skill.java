@@ -20,13 +20,13 @@ public class Skill {
     private String name;
 
     @Column(nullable = false, length = 50)
-    private String category; // Backend, Database, Frontend, Tools
+    private String category;
 
     @Column(nullable = false, length = 50)
-    private String icon;     // java, spring, mysql, react, etc.
+    private String icon;
 
     @Column(nullable = false, length = 30)
-    private String level;    // Beginner, Intermediate, Advanced, Expert
+    private String level;
 
     @Column(name = "years_of_experience")
     private Integer yearsOfExperience;

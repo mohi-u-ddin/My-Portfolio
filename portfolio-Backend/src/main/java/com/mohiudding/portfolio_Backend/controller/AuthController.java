@@ -17,21 +17,18 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // POST /api/auth/login - Authenticate admin & generate token
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         LoginResponse response = authService.login(loginRequest);
         return ResponseEntity.ok(response);
     }
 
-    // POST /api/auth/logout - Invalidate session
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
         authService.logout();
         return ResponseEntity.noContent().build();
     }
 
-    // GET /api/auth/me - Fetch currently authenticated user
     @GetMapping("/me")
     public ResponseEntity<User> getCurrentUser() {
         User user = authService.getCurrentUser();

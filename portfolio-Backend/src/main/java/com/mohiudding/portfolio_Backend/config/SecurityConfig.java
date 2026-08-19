@@ -20,7 +20,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(auth -> auth
-                        // Permit all API endpoints & H2 database console for local testing
                         .requestMatchers("/api/**", "/h2-console/**", "/error").permitAll()
                         .anyRequest().permitAll()
                 );

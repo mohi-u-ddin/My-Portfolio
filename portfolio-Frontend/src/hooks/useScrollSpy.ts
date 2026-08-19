@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 
-// Tracks which section is currently in view for navbar active-link highlighting.
 export function useScrollSpy(sectionIds: string[], offset = 120): string {
   const [activeId, setActiveId] = useState<string>(sectionIds[0] ?? "");
 

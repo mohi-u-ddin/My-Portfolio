@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
     public User updateAdmin(String name, String email) {
         User admin = getAdminUser();
 
-        // If email is changed, ensure the new email is not already taken
         if (!admin.getEmail().equalsIgnoreCase(email) && userRepository.existsByEmail(email)) {
             throw new BadRequestException("Email '" + email + "' is already in use");
         }

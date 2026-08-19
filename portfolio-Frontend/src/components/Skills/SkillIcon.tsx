@@ -16,8 +16,6 @@ import type { ComponentType } from "react";
 
 type IconComponent = ComponentType<{ size?: number; strokeWidth?: number }>;
 
-// Maps a skill's icon key (data-driven, comes from the API later) to a
-// concrete icon component. Falls back gracefully for unknown keys.
 const ICON_MAP: Record<string, IconComponent> = {
   java: Coffee,
   spring: Leaf,

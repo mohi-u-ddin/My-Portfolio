@@ -12,8 +12,6 @@ interface StatusViewProps {
   variant: "loading" | "empty" | "error";
 }
 
-// Consistent Loading / Empty / Error presentation used across every
-// API-driven section (Projects, Experience, Education, ...).
 export function StatusView({ loadingLabel, emptyLabel, errorLabel, retryLabel, onRetry, icon, variant }: StatusViewProps) {
   if (variant === "loading") {
     return (

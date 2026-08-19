@@ -22,7 +22,6 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponse login(LoginRequest loginRequest) {
         User authenticatedUser = userService.authenticate(loginRequest);
 
-        // Generate session bearer token
         String token = "bearer-token-" + UUID.randomUUID().toString();
 
         log.info("Generated authentication token for user: {}", authenticatedUser.getEmail());

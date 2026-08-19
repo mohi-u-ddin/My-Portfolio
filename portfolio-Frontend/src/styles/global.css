@@ -86,7 +86,6 @@ button {
   min-height: 100vh;
 }
 
-/* ---------- Layout helpers ---------- */
 .container {
   width: 100%;
   max-width: var(--container-w);

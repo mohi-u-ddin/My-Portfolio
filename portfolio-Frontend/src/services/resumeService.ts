@@ -12,7 +12,6 @@ export const resumeService = {
     if (USE_MOCKS) return mockDelay({ url: `/resume/${file.name}` }, 700);
     const formData = new FormData();
     formData.append("file", file);
-    // Note: real implementation should not set Content-Type manually for FormData.
     return api.post<{ url: string }>("/resume", formData, { auth: true });
   },
 

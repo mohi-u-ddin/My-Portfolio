@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-// Reports whether the page has been scrolled past a threshold, used to
-// toggle the navbar's blurred/translucent "scrolled" state.
 export function useScrolled(threshold = 24): boolean {
   const [scrolled, setScrolled] = useState(false);
 
