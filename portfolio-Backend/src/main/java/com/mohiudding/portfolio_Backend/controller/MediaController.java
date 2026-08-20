@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/media")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class MediaController {
 
     private final MediaFileService mediaFileService;

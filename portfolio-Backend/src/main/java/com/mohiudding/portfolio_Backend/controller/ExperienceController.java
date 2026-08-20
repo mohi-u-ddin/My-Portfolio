@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/experience")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class ExperienceController {
 
     private final ExperienceService experienceService;
