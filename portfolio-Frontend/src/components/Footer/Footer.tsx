@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon } from "../common/BrandIcons";
 import { useLanguage } from "../../contexts/LanguageContext";
@@ -32,7 +33,12 @@ export function Footer({ profile }: { profile: Profile | null }) {
         <p>
           © {year} {profile?.name ?? "Mohi Ud Din"}. {t.footer.rights}
         </p>
-        <p>{t.footer.builtWith}</p>
+        <div style={{ display: "flex", gap: "var(--sp-4)", alignItems: "center" }}>
+          <span>{t.footer.builtWith}</span>
+          <Link to="/admin/login" style={{ color: "var(--text-3)", textDecoration: "none", fontSize: "var(--fs-2xs)", opacity: 0.7 }}>
+            Admin Portal
+          </Link>
+        </div>
       </div>
     </footer>
   );
