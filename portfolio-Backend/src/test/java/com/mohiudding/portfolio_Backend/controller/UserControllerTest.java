@@ -4,14 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohiudding.portfolio_Backend.dto.LoginRequest;
 import com.mohiudding.portfolio_Backend.dto.PasswordChangeRequest;
 import com.mohiudding.portfolio_Backend.dto.UpdateProfileRequest;
+import com.mohiudding.portfolio_Backend.model.User;
+import com.mohiudding.portfolio_Backend.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.*;
@@ -29,7 +32,24 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void setUp() {
+        User admin = userRepository.findByEmail("admin@mohiuddin.dev")
+                .orElseGet(() -> User.builder().email("admin@mohiuddin.dev").build());
+        admin.setName("Mohi Ud Din");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole("admin");
+        userRepository.save(admin);
+    }
+
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("GET /api/users/profile should return the seeded admin profile")
     void testGetAdminProfile() throws Exception {
         mockMvc.perform(get("/api/users/profile")
@@ -43,6 +63,7 @@ class UserControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("POST /api/users/authenticate should succeed with correct credentials")
     void testAuthenticateSuccess() throws Exception {
         LoginRequest request = LoginRequest.builder()
@@ -59,6 +80,7 @@ class UserControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("POST /api/users/authenticate should return 400 for incorrect password")
     void testAuthenticateFailure() throws Exception {
         LoginRequest request = LoginRequest.builder()
@@ -75,6 +97,7 @@ class UserControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("PUT /api/users/profile should update admin name and email")
     void testUpdateProfile() throws Exception {
         UpdateProfileRequest request = UpdateProfileRequest.builder()
@@ -91,6 +114,7 @@ class UserControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("PUT /api/users/password should reject if current password is wrong")
     void testChangePasswordWrongCurrent() throws Exception {
         PasswordChangeRequest request = PasswordChangeRequest.builder()

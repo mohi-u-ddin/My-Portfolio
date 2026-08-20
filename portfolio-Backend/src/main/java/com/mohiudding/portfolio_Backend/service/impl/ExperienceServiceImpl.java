@@ -25,12 +25,7 @@ public class ExperienceServiceImpl implements ExperienceService {
     @Transactional(readOnly = true)
     public List<Experience> getAllExperiences() {
         log.info("Fetching all experiences");
-        List<Experience> experiences = experienceRepository.findAllByOrderByStartDateDesc();
-        if (experiences.isEmpty()) {
-            log.warn("No experiences found");
-            throw new ResourceNotFoundException("No experiences found");
-        }
-        return experiences;
+        return experienceRepository.findAllByOrderByStartDateDesc();
     }
 
     @Override

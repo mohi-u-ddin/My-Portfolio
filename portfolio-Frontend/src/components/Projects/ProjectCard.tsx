@@ -2,17 +2,26 @@ import { ExternalLink, Eye } from "lucide-react";
 import { GithubIcon } from "../common/BrandIcons";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { Badge } from "../common/Badge";
+import { resolveMediaUrl } from "../../utils/media";
 import type { Project } from "../../types";
 import "./ProjectCard.css";
 
 export function ProjectCard({ project, onViewDetails }: { project: Project; onViewDetails: (p: Project) => void }) {
   const { t } = useLanguage();
+  const imageSrc = resolveMediaUrl(project.image, "/projects/placeholder.svg");
 
   return (
     <article className="project-card">
       {project.featured && <span className="project-card__featured">Featured</span>}
       <div className="project-card__image">
-        <img src={project.image} alt="" loading="lazy" />
+        <img
+          src={imageSrc}
+          alt={project.title}
+          loading="lazy"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = "/projects/placeholder.svg";
+          }}
+        />
       </div>
       <div className="project-card__body">
         <h3 className="project-card__title">{project.title}</h3>

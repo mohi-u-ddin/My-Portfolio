@@ -1,12 +1,14 @@
 import { Download, Eye, FileText } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { Button } from "../common/Button";
+import { resolveMediaUrl } from "../../utils/media";
 import type { Profile } from "../../types";
 import "./Resume.css";
 
 export function Resume({ profile }: { profile: Profile | null }) {
   const { t } = useLanguage();
-  const resumeUrl = profile?.resumeUrl ?? "#";
+  const rawUrl = profile?.resumeUrl || "/api/resume/download";
+  const resumeUrl = resolveMediaUrl(rawUrl, "/api/resume/download");
 
   return (
     <section id="resume" className="section resume">
@@ -20,10 +22,23 @@ export function Resume({ profile }: { profile: Profile | null }) {
           {t.resume.subtitle}
         </p>
         <div className="resume__actions">
-          <Button as="a" href={resumeUrl} download variant="primary" icon={<Download size={16} />}>
+          <Button
+            as="a"
+            href={`${resumeUrl}${resumeUrl.includes("?") ? "&" : "?"}download=true`}
+            download="Resume.pdf"
+            variant="primary"
+            icon={<Download size={16} />}
+          >
             {t.resume.download}
           </Button>
-          <Button as="a" href={resumeUrl} target="_blank" rel="noreferrer" variant="secondary" icon={<Eye size={16} />}>
+          <Button
+            as="a"
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="secondary"
+            icon={<Eye size={16} />}
+          >
             {t.resume.view}
           </Button>
         </div>

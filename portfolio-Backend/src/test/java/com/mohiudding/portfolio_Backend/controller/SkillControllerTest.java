@@ -35,6 +35,7 @@ class SkillControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("POST /api/skills should create a new skill")
     void testCreateSkill() throws Exception {
         SkillDto newSkill = SkillDto.builder()

@@ -25,12 +25,7 @@ public class EducationServiceImpl implements EducationService {
     @Transactional(readOnly = true)
     public List<Education> getAllEducations() {
         log.info("Fetching all educations sorted chronologically");
-        List<Education> educations = educationRepository.findAllByOrderByStartDateDesc();
-        if (educations.isEmpty()) {
-            log.warn("No education records found");
-            throw new ResourceNotFoundException("No education records found");
-        }
-        return educations;
+        return educationRepository.findAllByOrderByStartDateDesc();
     }
 
     @Override

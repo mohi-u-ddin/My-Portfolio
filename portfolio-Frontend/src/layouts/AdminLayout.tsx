@@ -10,6 +10,7 @@ import {
   FileText,
   Languages,
   Settings,
+  Mail,
   LogOut,
   Menu,
   X,
@@ -20,6 +21,7 @@ import "./AdminLayout.css";
 
 const NAV = [
   { to: "/admin", icon: LayoutDashboard, key: "dashboard", end: true },
+  { to: "/admin/messages", icon: Mail, key: "messages" },
   { to: "/admin/profile", icon: User, key: "profile" },
   { to: "/admin/skills", icon: Sparkles, key: "skills" },
   { to: "/admin/projects", icon: FolderKanban, key: "projects" },

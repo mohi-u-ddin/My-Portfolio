@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
+import { Plus, Pencil, Trash2, Upload } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { useAsyncData } from "../../hooks/useAsyncData";
 import { usePageMeta } from "../../hooks/usePageMeta";
 import { projectService } from "../../services/projectService";
+import { mediaService } from "../../services/mediaService";
+import { resolveMediaUrl } from "../../utils/media";
 import { StatusView } from "../../components/common/StatusView";
 import { Button } from "../../components/common/Button";
 import { Modal } from "../../components/common/Modal";
@@ -31,6 +33,8 @@ export function AdminProjects() {
   const [form, setForm] = useState<Omit<Project, "id">>(emptyForm);
   const [techInput, setTechInput] = useState("");
   const [busy, setBusy] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   function openCreate() {
     setEditingId(null);
@@ -44,6 +48,22 @@ export function AdminProjects() {
     setForm({ ...project });
     setTechInput(project.technologies.join(", "));
     setModalOpen(true);
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    try {
+      const res = await mediaService.uploadImage(file, "PROJECT_IMAGE");
+      setForm((f) => ({ ...f, image: res.url }));
+    } catch (err: any) {
+      alert(err.message || "Failed to upload image to database.");
+    } finally {
+      setUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   }
 
   async function handleDelete(id: number) {
@@ -72,7 +92,7 @@ export function AdminProjects() {
       <div className="admin-page__head">
         <div>
           <h1>{t.admin.projects}</h1>
-          <p>Add, edit, or remove projects shown in the public Projects section.</p>
+          <p>Add, edit, or remove projects. Images are saved directly into the PostgreSQL database.</p>
         </div>
         <Button variant="primary" icon={<Plus size={16} />} onClick={openCreate}>
           {t.common.add} Project
@@ -89,6 +109,7 @@ export function AdminProjects() {
           <table className="admin-table">
             <thead>
               <tr>
+                <th>Preview</th>
                 <th>Title</th>
                 <th>Technologies</th>
                 <th>Featured</th>
@@ -98,6 +119,16 @@ export function AdminProjects() {
             <tbody>
               {projects!.map((project) => (
                 <tr key={project.id}>
+                  <td>
+                    <img
+                      src={resolveMediaUrl(project.image, "/projects/placeholder.svg")}
+                      alt=""
+                      style={{ width: 44, height: 32, borderRadius: 4, objectFit: "cover" }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/projects/placeholder.svg";
+                      }}
+                    />
+                  </td>
                   <td>{project.title}</td>
                   <td>{project.technologies.join(", ")}</td>
                   <td>{project.featured ? "Yes" : "No"}</td>
@@ -115,7 +146,7 @@ export function AdminProjects() {
               ))}
               {projects!.length === 0 && (
                 <tr className="admin-empty-row">
-                  <td colSpan={4}>No projects yet.</td>
+                  <td colSpan={5}>No projects in database yet. Click "Add Project" above to create one.</td>
                 </tr>
               )}
             </tbody>
@@ -133,13 +164,47 @@ export function AdminProjects() {
             <label htmlFor="pr-desc">Description</label>
             <textarea id="pr-desc" rows={3} value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))} />
           </div>
+
           <div className="admin-form__field">
-            <label htmlFor="pr-image">Image URL</label>
-            <input id="pr-image" value={form.image} onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))} />
+            <label>Project Thumbnail Image (Saved in PostgreSQL)</label>
+            <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "4px" }}>
+              <img
+                src={resolveMediaUrl(form.image, "/projects/placeholder.svg")}
+                alt=""
+                style={{ width: 64, height: 44, borderRadius: 6, objectFit: "cover", backgroundColor: "var(--bg-2)" }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/projects/placeholder.svg";
+                }}
+              />
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                onChange={handleImageUpload}
+                style={{ display: "none" }}
+              />
+              <Button
+                type="button"
+                variant="secondary"
+                icon={<Upload size={14} />}
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingImage}
+              >
+                {uploadingImage ? "Saving to Database..." : "Upload Image to Database"}
+              </Button>
+            </div>
+            <input
+              id="pr-image"
+              value={form.image}
+              onChange={(e) => setForm((f) => ({ ...f, image: e.target.value }))}
+              placeholder="/api/media/... or https://..."
+              style={{ marginTop: "8px" }}
+            />
           </div>
+
           <div className="admin-form__field">
             <label htmlFor="pr-tech">Technologies (comma-separated)</label>
-            <input id="pr-tech" value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="Java, Spring Boot, MySQL" />
+            <input id="pr-tech" value={techInput} onChange={(e) => setTechInput(e.target.value)} placeholder="Java, Spring Boot, PostgreSQL" />
           </div>
           <div className="admin-form__row">
             <div className="admin-form__field">

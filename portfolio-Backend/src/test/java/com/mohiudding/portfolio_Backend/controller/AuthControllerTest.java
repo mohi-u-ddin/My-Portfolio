@@ -2,12 +2,16 @@ package com.mohiudding.portfolio_Backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mohiudding.portfolio_Backend.dto.LoginRequest;
+import com.mohiudding.portfolio_Backend.model.User;
+import com.mohiudding.portfolio_Backend.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +29,22 @@ class AuthControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void setUp() {
+        User admin = userRepository.findByEmail("admin@mohiuddin.dev")
+                .orElseGet(() -> User.builder().email("admin@mohiuddin.dev").build());
+        admin.setName("Mohi Ud Din");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole("admin");
+        userRepository.save(admin);
+    }
 
     @Test
     @DisplayName("POST /api/auth/login should return 200 with JWT token and user info")
@@ -61,6 +81,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("POST /api/auth/logout should return 204 No Content")
     void testLogout() throws Exception {
         mockMvc.perform(post("/api/auth/logout")
@@ -69,6 +90,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @org.springframework.security.test.context.support.WithMockUser(roles = "ADMIN")
     @DisplayName("GET /api/auth/me should return admin user profile")
     void testGetCurrentUser() throws Exception {
         mockMvc.perform(get("/api/auth/me")

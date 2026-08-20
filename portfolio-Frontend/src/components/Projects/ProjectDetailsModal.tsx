@@ -4,17 +4,26 @@ import { useLanguage } from "../../contexts/LanguageContext";
 import { Modal } from "../common/Modal";
 import { Badge } from "../common/Badge";
 import { Button } from "../common/Button";
+import { resolveMediaUrl } from "../../utils/media";
 import type { Project } from "../../types";
 
 export function ProjectDetailsModal({ project, onClose }: { project: Project | null; onClose: () => void }) {
   const { t } = useLanguage();
+  const imageSrc = project ? resolveMediaUrl(project.image, "/projects/placeholder.svg") : "";
 
   return (
     <Modal isOpen={Boolean(project)} onClose={onClose} title={project?.title ?? ""} closeLabel={t.projects.close}>
       {project && (
         <>
           <div style={{ borderRadius: "var(--radius-md)", overflow: "hidden", marginBottom: "var(--sp-5)", background: "var(--bg-2)" }}>
-            <img src={project.image} alt="" style={{ width: "100%", display: "block", aspectRatio: "16/9", objectFit: "cover" }} />
+            <img
+              src={imageSrc}
+              alt={project.title}
+              style={{ width: "100%", display: "block", aspectRatio: "16/9", objectFit: "cover" }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/projects/placeholder.svg";
+              }}
+            />
           </div>
           <p style={{ color: "var(--text-2)", lineHeight: "var(--lh-normal)" }}>{project.description}</p>
 

@@ -1,16 +1,25 @@
 import { useLanguage } from "../../contexts/LanguageContext";
+import { resolveMediaUrl } from "../../utils/media";
 import type { Profile } from "../../types";
 import "./About.css";
 
 export function About({ profile }: { profile: Profile | null }) {
   const { t } = useLanguage();
 
+  const avatarSrc = resolveMediaUrl(profile?.avatarUrl, "/avatar-placeholder.svg");
+
   return (
     <section id="about" className="section about">
       <div className="container about__inner">
         <div className="about__media">
           <div className="about__frame">
-            <img src={profile?.avatarUrl ?? "/avatar-placeholder.svg"} alt={profile?.name ?? "Profile"} />
+            <img
+              src={avatarSrc}
+              alt={profile?.name ?? "Profile"}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/avatar-placeholder.svg";
+              }}
+            />
           </div>
           <div className="about__stats">
             {(profile?.stats ?? []).map((stat) => (

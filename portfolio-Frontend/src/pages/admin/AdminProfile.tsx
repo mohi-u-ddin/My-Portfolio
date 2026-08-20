@@ -1,9 +1,12 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Upload, CheckCircle2, AlertCircle } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { useAsyncData } from "../../hooks/useAsyncData";
 import { usePageMeta } from "../../hooks/usePageMeta";
 import { portfolioService } from "../../services/portfolioService";
+import { mediaService } from "../../services/mediaService";
 import { authService } from "../../services/authService";
+import { resolveMediaUrl } from "../../utils/media";
 import { Button } from "../../components/common/Button";
 import { StatusView } from "../../components/common/StatusView";
 import type { Profile } from "../../types";
@@ -16,6 +19,9 @@ export function AdminProfile() {
   const [form, setForm] = useState<Profile | null>(null);
   const [saving, setSaving] = useState(false);
   const [savedMessage, setSavedMessage] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarMsg, setAvatarMsg] = useState<{ text: string; type: "success" | "error" } | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -30,6 +36,24 @@ export function AdminProfile() {
 
   function update<K extends keyof Profile>(key: K, value: Profile[K]) {
     setForm((prev) => (prev ? { ...prev, [key]: value } : prev));
+  }
+
+  async function handleAvatarUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setAvatarUploading(true);
+    setAvatarMsg(null);
+    try {
+      const res = await mediaService.uploadAvatar(file);
+      update("avatarUrl", res.url);
+      setAvatarMsg({ text: `Photo "${file.name}" uploaded and saved in PostgreSQL database!`, type: "success" });
+    } catch (err: any) {
+      setAvatarMsg({ text: err.message || "Failed to upload photo to database.", type: "error" });
+    } finally {
+      setAvatarUploading(false);
+      if (avatarInputRef.current) avatarInputRef.current.value = "";
+    }
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -83,7 +107,7 @@ export function AdminProfile() {
       <div className="admin-page__head">
         <div>
           <h1>{t.admin.profile}</h1>
-          <p>Manage the public-facing profile details shown across the site.</p>
+          <p>Manage your profile, bio, contact details, and database-stored avatar photo.</p>
         </div>
       </div>
 
@@ -98,6 +122,78 @@ export function AdminProfile() {
         <>
           <form className="admin-panel" style={{ padding: "var(--sp-6)", marginBottom: "var(--sp-6)" }} onSubmit={handleSubmit}>
             <div className="admin-form">
+              {/* Avatar Section with Instant Photo Upload */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "var(--sp-5)",
+                  padding: "var(--sp-4)",
+                  backgroundColor: "var(--bg-2)",
+                  borderRadius: "var(--radius-md)",
+                  marginBottom: "var(--sp-4)",
+                  flexWrap: "wrap",
+                }}
+              >
+                <img
+                  src={resolveMediaUrl(form.avatarUrl, "/avatar-placeholder.svg")}
+                  alt="Profile Avatar"
+                  style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: "2px solid var(--accent-500)",
+                    backgroundColor: "var(--bg-3)",
+                  }}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = "/avatar-placeholder.svg";
+                  }}
+                />
+                <div style={{ flex: 1, minWidth: 220 }}>
+                  <p style={{ fontWeight: 600, fontSize: "var(--fs-sm)", marginBottom: "4px" }}>Profile Photo</p>
+                  <p style={{ fontSize: "var(--fs-xs)", color: "var(--text-3)", marginBottom: "8px" }}>
+                    Stored in PostgreSQL database. No need to copy files into project folders!
+                  </p>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
+                    onChange={handleAvatarUpload}
+                    style={{ display: "none" }}
+                    id="avatar-file-input"
+                  />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    icon={<Upload size={14} />}
+                    onClick={() => avatarInputRef.current?.click()}
+                    disabled={avatarUploading}
+                  >
+                    {avatarUploading ? "Saving to Database..." : "Upload Photo to Database"}
+                  </Button>
+                </div>
+              </div>
+
+              {avatarMsg && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "8px 12px",
+                    borderRadius: "var(--radius-sm)",
+                    marginBottom: "var(--sp-4)",
+                    fontSize: "var(--fs-sm)",
+                    color: avatarMsg.type === "success" ? "var(--success-500)" : "var(--error-500)",
+                    backgroundColor: avatarMsg.type === "success" ? "rgba(34, 197, 94, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                  }}
+                >
+                  {avatarMsg.type === "success" ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
+                  {avatarMsg.text}
+                </div>
+              )}
+
               <div className="admin-form__row">
                 <div className="admin-form__field">
                   <label htmlFor="p-name">Name</label>
@@ -115,7 +211,7 @@ export function AdminProfile() {
               </div>
 
               <div className="admin-form__field">
-                <label htmlFor="p-avatar">Profile image URL</label>
+                <label htmlFor="p-avatar">Avatar URL / API Endpoint</label>
                 <input id="p-avatar" value={form.avatarUrl} onChange={(e) => update("avatarUrl", e.target.value)} />
               </div>
 
@@ -147,7 +243,7 @@ export function AdminProfile() {
               </div>
 
               <div className="admin-form__actions">
-                {savedMessage && <span style={{ color: "var(--success-500)", fontSize: "var(--fs-sm)", alignSelf: "center", marginInlineEnd: "auto" }}>Saved.</span>}
+                {savedMessage && <span style={{ color: "var(--success-500)", fontSize: "var(--fs-sm)", alignSelf: "center", marginInlineEnd: "auto" }}>Saved successfully to database.</span>}
                 <Button type="button" variant="secondary" onClick={() => setForm(profile)}>
                   {t.common.cancel}
                 </Button>

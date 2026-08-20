@@ -14,6 +14,7 @@ import { AdminEducation } from "./pages/admin/AdminEducation";
 import { AdminResume } from "./pages/admin/AdminResume";
 import { AdminTranslations } from "./pages/admin/AdminTranslations";
 import { AdminSettings } from "./pages/admin/AdminSettings";
+import { AdminMessages } from "./pages/admin/AdminMessages";
 
 function withAdminLayout(children: ReactNode) {
   return (
@@ -38,6 +39,7 @@ export default function App() {
       <Route path="/admin/login" element={<AdminLogin />} />
 
       <Route path="/admin" element={withAdminLayout(<AdminDashboard />)} />
+      <Route path="/admin/messages" element={withAdminLayout(<AdminMessages />)} />
       <Route path="/admin/profile" element={withAdminLayout(<AdminProfile />)} />
       <Route path="/admin/skills" element={withAdminLayout(<AdminSkills />)} />
       <Route path="/admin/projects" element={withAdminLayout(<AdminProjects />)} />

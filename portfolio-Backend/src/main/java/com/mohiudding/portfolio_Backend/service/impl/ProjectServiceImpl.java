@@ -25,24 +25,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional(readOnly = true)
     public List<Project> getAllProjects() {
         log.info("Fetching all projects");
-        List<Project> projects = projectRepository.findAllByOrderByCreatedAtDesc();
-        if (projects.isEmpty()) {
-            log.warn("No projects found");
-            throw new ResourceNotFoundException("No projects found");
-        }
-        return projects;
+        return projectRepository.findAllByOrderByCreatedAtDesc();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<Project> getFeaturedProjects() {
         log.info("Fetching featured projects");
-        List<Project> featuredProjects = projectRepository.findByFeaturedTrue();
-        if (featuredProjects.isEmpty()) {
-            log.warn("No featured projects found");
-            throw new ResourceNotFoundException("No featured projects found");
-        }
-        return featuredProjects;
+        return projectRepository.findByFeaturedTrue();
     }
 
     @Override
