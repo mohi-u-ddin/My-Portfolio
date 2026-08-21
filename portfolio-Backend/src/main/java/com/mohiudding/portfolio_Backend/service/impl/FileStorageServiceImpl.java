@@ -23,15 +23,24 @@ public class FileStorageServiceImpl implements FileStorageService {
     private static final Set<String> ALLOWED_IMAGE_EXTENSIONS = Set.of(".jpg", ".jpeg", ".png", ".webp", ".svg", ".gif");
 
     public FileStorageServiceImpl(@Value("${file.upload-dir:uploads}") String uploadDir) {
-        this.rootUploadDir = Paths.get(uploadDir).toAbsolutePath().normalize();
+        Path resolved;
         try {
-            Files.createDirectories(this.rootUploadDir);
-            Files.createDirectories(this.rootUploadDir.resolve("resume"));
-            Files.createDirectories(this.rootUploadDir.resolve("images"));
-        } catch (IOException e) {
-            log.error("Could not initialize storage directory", e);
-            throw new RuntimeException("Could not initialize storage directory", e);
+            resolved = Paths.get(uploadDir).toAbsolutePath().normalize();
+            Files.createDirectories(resolved);
+            Files.createDirectories(resolved.resolve("resume"));
+            Files.createDirectories(resolved.resolve("images"));
+        } catch (Exception e) {
+            log.warn("Could not initialize storage directory '{}': {}. Falling back to default 'uploads'", uploadDir, e.getMessage());
+            try {
+                resolved = Paths.get("uploads").toAbsolutePath().normalize();
+                Files.createDirectories(resolved);
+                Files.createDirectories(resolved.resolve("resume"));
+                Files.createDirectories(resolved.resolve("images"));
+            } catch (Exception ex) {
+                resolved = Paths.get(System.getProperty("java.io.tmpdir"), "uploads").toAbsolutePath().normalize();
+            }
         }
+        this.rootUploadDir = resolved;
     }
 
     @Override

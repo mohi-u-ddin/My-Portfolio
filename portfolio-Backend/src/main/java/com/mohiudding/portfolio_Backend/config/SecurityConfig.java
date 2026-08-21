@@ -72,7 +72,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
 
                         // Diagnostics & developer endpoints
-                        .requestMatchers("/h2-console/**", "/error").permitAll()
+                        .requestMatchers("/", "/api/health", "/h2-console/**", "/error").permitAll()
 
                         // Protected Admin endpoints - Explicit role check
                         .requestMatchers("/api/auth/me", "/api/auth/logout").authenticated()
