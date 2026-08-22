@@ -22,13 +22,13 @@ public class DataInitializer implements CommandLineRunner {
     private final TranslationEntryRepository translationRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${admin.default.email:admin@mohiuddin.dev}")
+    @Value("${admin.default.email:}")
     private String defaultAdminEmail;
 
-    @Value("${admin.default.password:admin123}")
+    @Value("${admin.default.password:}")
     private String defaultAdminPassword;
 
-    @Value("${admin.default.name:Mohi Ud Din}")
+    @Value("${admin.default.name:}")
     private String defaultAdminName;
 
     @Override
@@ -41,9 +41,14 @@ public class DataInitializer implements CommandLineRunner {
 
     private void seedAdminUserIfAbsent() {
         if (userRepository.count() == 0) {
+            if (defaultAdminEmail == null || defaultAdminEmail.isBlank() ||
+                defaultAdminPassword == null || defaultAdminPassword.isBlank()) {
+                log.info("No existing admin found in database and ADMIN_EMAIL/ADMIN_PASSWORD not set in environment. Skipping admin seed.");
+                return;
+            }
             log.info("Initializing initial administrator account...");
             User admin = User.builder()
-                    .name(defaultAdminName)
+                    .name(defaultAdminName != null && !defaultAdminName.isBlank() ? defaultAdminName : "Admin")
                     .email(defaultAdminEmail)
                     .password(passwordEncoder.encode(defaultAdminPassword))
                     .role("ADMIN")

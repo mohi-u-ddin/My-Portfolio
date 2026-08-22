@@ -12,7 +12,7 @@ import lombok.*;
 public class LoginRequest {
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Please provide a valid email address (e.g. admin@mohiuddin.dev)")
+    @Email(message = "Please provide a valid email address")
     private String email;
 
     @NotBlank(message = "Password is required")

@@ -102,10 +102,6 @@ export function AdminLogin() {
             {isLoading ? t.admin.loggingIn : t.admin.login}
           </Button>
         </form>
-
-        <p className="admin-login__hint">
-          Demo credentials: <code>admin@mohiuddin.dev</code> / <code>admin123</code>
-        </p>
       </div>
     </div>
   );
