@@ -15,15 +15,19 @@ import java.util.function.Function;
 
 @Slf4j
 @Service
+
 public class JwtService {
 
-    @Value("${jwt.secret:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970337336763979244226452948404D6351}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.expiration:86400000}")
     private long jwtExpiration; // Default 24 hours in milliseconds
 
     private SecretKey getSigningKey() {
+        if (secretKey == null || secretKey.trim().isEmpty()) {
+            throw new IllegalStateException("JWT secret key is not configured. Please set the JWT_SECRET environment variable.");
+        }
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {
             // Pad to at least 256 bits (32 bytes) if secret is short in local test
