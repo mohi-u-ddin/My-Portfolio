@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/*
 
-Sitemap: https://mohi-ud-din.vercel.app/sitemap.xml
+Sitemap: https://www.mohiuddin.tech/sitemap.xml
