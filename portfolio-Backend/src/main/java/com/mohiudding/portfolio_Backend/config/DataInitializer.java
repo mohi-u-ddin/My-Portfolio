@@ -70,8 +70,8 @@ public class DataInitializer implements CommandLineRunner {
                     .email("admin@mohiuddin.dev")
                     .location("Islamabad, Pakistan")
                     .availability("Available for Full-time & Contract Roles")
-                    .githubUrl("https://github.com")
-                    .linkedinUrl("https://linkedin.com")
+                    .githubUrl("https://github.com/mohi-u-ddin")
+                    .linkedinUrl("https://www.linkedin.com/in/mohi-ud-din-096b55384")
                     .resumeUrl("/api/resume/download")
                     .stats(List.of(
                             ProfileStat.builder().value("3+").label("Years Experience").build(),
@@ -92,8 +92,8 @@ public class DataInitializer implements CommandLineRunner {
                     .siteDescription("Full Stack Developer Portfolio showcasing modern web and backend engineering.")
                     .contactEmail("admin@mohiuddin.dev")
                     .socialLinks(SocialLinks.builder()
-                            .github("https://github.com")
-                            .linkedin("https://linkedin.com")
+                            .github("https://github.com/mohi-u-ddin")
+                            .linkedin("https://www.linkedin.com/in/mohi-ud-din-096b55384")
                             .build())
                     .availableLanguages(List.of("en", "ur"))
                     .resumeUrl("/api/resume/download")

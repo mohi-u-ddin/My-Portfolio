@@ -9,8 +9,8 @@ export const mockProfile: Profile = {
   email: "hello@mohiuddin.dev",
   location: "Islamabad, Pakistan",
   availability: "Open to internships & backend roles",
-  githubUrl: "https://github.com/mohiuddin",
-  linkedinUrl: "https://linkedin.com/in/mohiuddin",
+  githubUrl: "https://github.com/mohi-u-ddin",
+  linkedinUrl: "https://www.linkedin.com/in/mohi-ud-din-096b55384",
   resumeUrl: "/resume/Mohi-Ud-Din-Resume.pdf",
   stats: [
     { id: 1, value: "10+", label: "Technologies" },
