@@ -50,7 +50,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
       body: finalBody,
     });
   } catch {
-    throw new ApiError("Network error. Please check your connection.");
+    throw new ApiError("Unable to reach server. The backend may be waking up from idle mode — please retry.");
   }
 
   if (!response.ok) {

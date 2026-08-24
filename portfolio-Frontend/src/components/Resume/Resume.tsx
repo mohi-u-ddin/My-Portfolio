@@ -7,8 +7,10 @@ import "./Resume.css";
 
 export function Resume({ profile }: { profile: Profile | null }) {
   const { t } = useLanguage();
-  const rawUrl = profile?.resumeUrl || "/api/resume/download";
-  const resumeUrl = resolveMediaUrl(rawUrl, "/api/resume/download");
+  const rawUrl = profile?.resumeUrl || "";
+  const hasResume = Boolean(rawUrl && rawUrl.trim() !== "");
+  const baseResumeUrl = hasResume ? resolveMediaUrl(rawUrl, "/api/resume/download") : "";
+  const resumeUrl = baseResumeUrl ? `${baseResumeUrl}${baseResumeUrl.includes("?") ? "&" : "?"}t=${Date.now()}` : "";
 
   return (
     <section id="resume" className="section resume">
@@ -22,25 +24,33 @@ export function Resume({ profile }: { profile: Profile | null }) {
           {t.resume.subtitle}
         </p>
         <div className="resume__actions">
-          <Button
-            as="a"
-            href={`${resumeUrl}${resumeUrl.includes("?") ? "&" : "?"}download=true`}
-            download="Resume.pdf"
-            variant="primary"
-            icon={<Download size={16} />}
-          >
-            {t.resume.download}
-          </Button>
-          <Button
-            as="a"
-            href={resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            variant="secondary"
-            icon={<Eye size={16} />}
-          >
-            {t.resume.view}
-          </Button>
+          {hasResume ? (
+            <>
+              <Button
+                as="a"
+                href={`${resumeUrl}${resumeUrl.includes("?") ? "&" : "?"}download=true`}
+                download="Resume.pdf"
+                variant="primary"
+                icon={<Download size={16} />}
+              >
+                {t.resume.download}
+              </Button>
+              <Button
+                as="a"
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+                icon={<Eye size={16} />}
+              >
+                {t.resume.view}
+              </Button>
+            </>
+          ) : (
+            <p style={{ color: "var(--text-3)", fontSize: "var(--fs-sm)" }}>
+              Resume will be available soon.
+            </p>
+          )}
         </div>
       </div>
     </section>

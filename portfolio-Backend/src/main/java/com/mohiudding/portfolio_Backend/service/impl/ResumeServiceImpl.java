@@ -17,6 +17,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -39,10 +41,34 @@ public class ResumeServiceImpl implements ResumeService {
 
         return profileRepository.findFirstByOrderByIdAsc()
                 .map(Profile::getResumeUrl)
-                .filter(url -> url != null && !url.trim().isEmpty())
+                .filter(url -> url != null && !url.trim().isEmpty() && !url.equals("/api/resume/download"))
                 .orElseGet(() -> siteSettingsRepository.findFirstByOrderByIdAsc()
                         .map(SiteSettings::getResumeUrl)
+                        .filter(url -> url != null && !url.trim().isEmpty() && !url.equals("/api/resume/download"))
                         .orElse(""));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> getResumeDetails() {
+        Optional<MediaFile> resume = mediaFileRepository.findFirstByFileTypeOrderByIdDesc("RESUME");
+        Map<String, Object> result = new HashMap<>();
+
+        if (resume.isPresent()) {
+            MediaFile file = resume.get();
+            result.put("url", "/api/resume/download");
+            result.put("fileName", file.getFileName());
+            result.put("fileSize", file.getFileSize());
+            result.put("updatedAt", file.getUpdatedAt() != null ? file.getUpdatedAt().toString() : (file.getCreatedAt() != null ? file.getCreatedAt().toString() : ""));
+            return result;
+        }
+
+        String fallbackUrl = getResumeUrl();
+        result.put("url", fallbackUrl);
+        result.put("fileName", fallbackUrl.isEmpty() ? "" : "Resume.pdf");
+        result.put("fileSize", 0);
+        result.put("updatedAt", "");
+        return result;
     }
 
     @Override
@@ -70,6 +96,7 @@ public class ResumeServiceImpl implements ResumeService {
 
             // Clean up previous resume records
             mediaFileRepository.deleteByFileType("RESUME");
+            mediaFileRepository.flush();
 
             MediaFile mediaFile = MediaFile.builder()
                     .fileName(originalName)
@@ -79,7 +106,7 @@ public class ResumeServiceImpl implements ResumeService {
                     .data(bytes)
                     .build();
 
-            mediaFileRepository.save(mediaFile);
+            mediaFileRepository.saveAndFlush(mediaFile);
 
             String downloadUrl = "/api/resume/download";
 
@@ -105,6 +132,7 @@ public class ResumeServiceImpl implements ResumeService {
     public void deleteResume() {
         log.info("Deleting resume from database...");
         mediaFileRepository.deleteByFileType("RESUME");
+        mediaFileRepository.flush();
 
         profileRepository.findFirstByOrderByIdAsc().ifPresent(profile -> {
             profile.setResumeUrl("");

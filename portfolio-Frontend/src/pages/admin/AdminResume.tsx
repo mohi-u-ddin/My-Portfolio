@@ -12,13 +12,17 @@ import "../../components/common/AdminPage.css";
 export function AdminResume() {
   const { t } = useLanguage();
   usePageMeta("Resume — Admin");
-  const { data: resumeUrl, state, reload } = useAsyncData(() => resumeService.getResumeUrl());
+  const { data: resumeInfo, state, reload } = useAsyncData(() => resumeService.getResumeDetails());
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
+  const [cacheBuster, setCacheBuster] = useState<number>(Date.now());
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const resolvedUrl = resolveMediaUrl(resumeUrl || "/api/resume/download", "/api/resume/download");
+  const rawUrl = resumeInfo?.url || "";
+  const hasResume = Boolean(rawUrl && rawUrl.trim() !== "");
+  const baseResolvedUrl = hasResume ? resolveMediaUrl(rawUrl, "/api/resume/download") : "";
+  const resolvedUrl = baseResolvedUrl ? `${baseResolvedUrl}${baseResolvedUrl.includes("?") ? "&" : "?"}v=${cacheBuster}` : "";
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -35,6 +39,7 @@ export function AdminResume() {
     try {
       await resumeService.uploadResume(file);
       setSuccessMsg(`"${file.name}" was successfully uploaded and stored in the database.`);
+      setCacheBuster(Date.now());
       reload();
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to upload resume to database.");
@@ -52,6 +57,7 @@ export function AdminResume() {
     try {
       await resumeService.deleteResume();
       setSuccessMsg("Resume removed from database.");
+      setCacheBuster(Date.now());
       reload();
     } catch (err: any) {
       setErrorMsg(err.message || "Failed to delete resume.");
@@ -105,10 +111,10 @@ export function AdminResume() {
             <div>
               <p style={{ fontSize: "var(--fs-xs)", color: "var(--text-3)" }}>Active Resume</p>
               <p style={{ fontWeight: 600, fontSize: "var(--fs-md)" }}>
-                {resumeUrl ? resumeUrl.split("/").pop() : "No resume uploaded yet"}
+                {hasResume ? (resumeInfo?.fileName || "Uploaded Resume.pdf") : "No resume uploaded yet"}
               </p>
-              <p style={{ fontSize: "var(--fs-xs)", color: "var(--accent-400)", marginTop: "2px" }}>
-                Stored in PostgreSQL Database
+              <p style={{ fontSize: "var(--fs-xs)", color: hasResume ? "var(--accent-400)" : "var(--text-3)", marginTop: "2px" }}>
+                {hasResume ? "Stored in PostgreSQL Database" : "Upload a PDF resume to make it available on your portfolio"}
               </p>
             </div>
           </div>
@@ -164,10 +170,10 @@ export function AdminResume() {
               onClick={() => fileInputRef.current?.click()}
               disabled={busy}
             >
-              {busy ? "Uploading to Database..." : resumeUrl ? "Replace Resume PDF" : "Upload Resume PDF"}
+              {busy ? "Uploading to Database..." : hasResume ? "Replace Resume PDF" : "Upload Resume PDF"}
             </Button>
 
-            {resumeUrl && (
+            {hasResume && (
               <>
                 <a href={resolvedUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
                   <Button variant="secondary" icon={<Eye size={16} />}>
@@ -176,7 +182,7 @@ export function AdminResume() {
                 </a>
                 <a
                   href={`${resolvedUrl}${resolvedUrl.includes("?") ? "&" : "?"}download=true`}
-                  download="Resume.pdf"
+                  download={resumeInfo?.fileName || "Resume.pdf"}
                   style={{ textDecoration: "none" }}
                 >
                   <Button variant="secondary" icon={<Download size={16} />}>

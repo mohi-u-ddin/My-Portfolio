@@ -22,9 +22,8 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     @GetMapping
-    public ResponseEntity<Map<String, String>> getResumeUrl() {
-        String url = resumeService.getResumeUrl();
-        return ResponseEntity.ok(Map.of("url", url != null ? url : ""));
+    public ResponseEntity<Map<String, Object>> getResumeDetails() {
+        return ResponseEntity.ok(resumeService.getResumeDetails());
     }
 
     @GetMapping("/download")
@@ -37,7 +36,9 @@ public class ResumeController {
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
                     .header(HttpHeaders.CONTENT_DISPOSITION, dispositionType + "; filename=\"" + filename + "\"")
-                    .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600")
+                    .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+                    .header(HttpHeaders.PRAGMA, "no-cache")
+                    .header(HttpHeaders.EXPIRES, "0")
                     .body(resumeFile.getData());
         } catch (Exception e) {
             log.warn("Resume download failed: {}", e.getMessage());
@@ -57,3 +58,4 @@ public class ResumeController {
         return ResponseEntity.noContent().build();
     }
 }
+
