@@ -94,7 +94,6 @@ public class ResumeServiceImpl implements ResumeService {
             byte[] bytes = file.getBytes();
             log.info("Persisting resume PDF '{}' into database, size: {} bytes", originalName, bytes.length);
 
-            // Clean up previous resume records
             mediaFileRepository.deleteByFileType("RESUME");
             mediaFileRepository.flush();
 

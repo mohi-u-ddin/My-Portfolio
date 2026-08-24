@@ -152,7 +152,6 @@ class SecurityIntegrationTest {
         String responseBody = loginResult.getResponse().getContentAsString();
         String token = objectMapper.readTree(responseBody).get("token").asText();
 
-        // Perform Create with token
         SkillDto skillDto = SkillDto.builder()
                 .name("Spring Cloud")
                 .category("Backend")
@@ -170,7 +169,6 @@ class SecurityIntegrationTest {
 
         long skillId = objectMapper.readTree(createResult.getResponse().getContentAsString()).get("id").asLong();
 
-        // Perform Update with token
         skillDto.setName("Spring Cloud Microservices");
         mockMvc.perform(put("/api/skills/" + skillId)
                         .header("Authorization", "Bearer " + token)
@@ -179,7 +177,6 @@ class SecurityIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("Spring Cloud Microservices")));
 
-        // Perform Delete with token
         mockMvc.perform(delete("/api/skills/" + skillId)
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isNoContent());

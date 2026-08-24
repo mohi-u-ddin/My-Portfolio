@@ -63,7 +63,6 @@ export function AdminDashboard() {
         ))}
       </div>
 
-      {/* Recent Contact Inquiries */}
       <div className="admin-panel" style={{ marginBottom: "var(--sp-6)" }}>
         <div className="admin-panel__head">
           <h2>Recent Messages</h2>

@@ -92,7 +92,6 @@ export function AdminMessages() {
         setSelectedMessage(updated);
         reload();
       } catch {
-        // Continue displaying modal even if mark as read fails
       }
     }
   }
@@ -126,7 +125,6 @@ export function AdminMessages() {
         </div>
       </div>
 
-      {/* Metric Cards */}
       <div className="admin-stat-grid">
         <div className="admin-stat-card">
           <span className="admin-stat-card__icon">
@@ -159,7 +157,6 @@ export function AdminMessages() {
         </div>
       </div>
 
-      {/* Control Bar: Filters & Search */}
       <div
         style={{
           display: "flex",
@@ -396,7 +393,6 @@ export function AdminMessages() {
         </div>
       )}
 
-      {/* Message View Modal */}
       <Modal
         isOpen={isModalOpen && selectedMessage !== null}
         onClose={() => {
@@ -408,7 +404,6 @@ export function AdminMessages() {
       >
         {selectedMessage && (
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-4)" }}>
-            {/* Header info */}
             <div
               style={{
                 background: "var(--bg-1)",
@@ -438,7 +433,6 @@ export function AdminMessages() {
               </div>
             </div>
 
-            {/* Message Body */}
             <div className="admin-form__field">
               <label style={{ color: "var(--text-3)", fontSize: "var(--fs-xs)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                 Message Content
@@ -460,7 +454,6 @@ export function AdminMessages() {
               </div>
             </div>
 
-            {/* Actions */}
             <div
               style={{
                 display: "flex",

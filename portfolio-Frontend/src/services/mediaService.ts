@@ -3,7 +3,6 @@ import { api, USE_MOCKS, mockDelay } from "./api";
 export const mediaService = {
   async uploadImage(file: File, category = "PROJECT_IMAGE"): Promise<{ url: string; id?: number }> {
     if (USE_MOCKS) {
-      // Create a local Object URL for immediate preview
       const previewUrl = URL.createObjectURL(file);
       return mockDelay({ url: previewUrl, id: Date.now() }, 400);
     }

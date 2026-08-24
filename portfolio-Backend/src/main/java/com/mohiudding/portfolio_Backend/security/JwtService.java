@@ -22,7 +22,7 @@ public class JwtService {
     private String secretKey;
 
     @Value("${jwt.expiration:86400000}")
-    private long jwtExpiration; // Default 24 hours in milliseconds
+    private long jwtExpiration;
 
     private SecretKey getSigningKey() {
         if (secretKey == null || secretKey.trim().isEmpty()) {
@@ -30,7 +30,6 @@ public class JwtService {
         }
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         if (keyBytes.length < 32) {
-            // Pad to at least 256 bits (32 bytes) if secret is short in local test
             byte[] padded = new byte[32];
             System.arraycopy(keyBytes, 0, padded, 0, Math.min(keyBytes.length, 32));
             return Keys.hmacShaKeyFor(padded);

@@ -122,7 +122,6 @@ export function AdminProfile() {
         <>
           <form className="admin-panel" style={{ padding: "var(--sp-6)", marginBottom: "var(--sp-6)" }} onSubmit={handleSubmit}>
             <div className="admin-form">
-              {/* Avatar Section with Instant Photo Upload */}
               <div
                 style={{
                   display: "flex",

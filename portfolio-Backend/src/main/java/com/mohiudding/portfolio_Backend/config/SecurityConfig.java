@@ -52,14 +52,9 @@ public class SecurityConfig {
                 )
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow CORS Pre-flight Options requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // Public endpoints - Authentication & Contact message submission
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contact").permitAll()
-
-                        // Public endpoints - Read-only portfolio data
                         .requestMatchers(HttpMethod.GET, "/api/portfolio/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/skills/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
@@ -70,11 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/resume/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
-
-                        // Diagnostics & developer endpoints
                         .requestMatchers("/", "/api/health", "/h2-console/**", "/error").permitAll()
-
-                        // Protected Admin endpoints - Explicit role check
                         .requestMatchers("/api/auth/me", "/api/auth/logout").authenticated()
                         .requestMatchers("/api/users/**").hasAnyRole("ADMIN")
                         .requestMatchers("/api/upload/**").hasAnyRole("ADMIN")
@@ -82,14 +73,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/resume/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/resume/**").hasAnyRole("ADMIN")
                         .requestMatchers("/api/contact/messages/**").hasAnyRole("ADMIN")
-
-                        // Any mutation (POST, PUT, PATCH, DELETE) to portfolio resources requires ADMIN
                         .requestMatchers(HttpMethod.POST, "/api/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasAnyRole("ADMIN")
-
-                        // Any remaining request requires authentication
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

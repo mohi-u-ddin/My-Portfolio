@@ -67,7 +67,6 @@ export function Hero({ profile }: { profile: Profile | null }) {
               alt={profile?.name || "Profile avatar"}
               className="hero__avatar"
               onError={(e) => {
-                // Fallback to placeholder if custom image fails
                 (e.currentTarget as HTMLImageElement).src = "/avatar-placeholder.svg";
               }}
             />

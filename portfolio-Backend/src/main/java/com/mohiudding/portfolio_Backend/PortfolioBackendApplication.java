@@ -47,7 +47,6 @@ public class PortfolioBackendApplication {
 				}
 			}
 		} catch (Exception ignored) {
-			// Silently fall back to standard Spring Boot environment / application.properties
 		}
 	}
 }

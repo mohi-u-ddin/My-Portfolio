@@ -27,7 +27,7 @@ public class MediaFile {
     private String contentType;
 
     @Column(name = "file_type", nullable = false, length = 50)
-    private String fileType; // "RESUME", "AVATAR", "PROJECT_IMAGE", "GENERAL"
+    private String fileType;
 
     @Column(name = "file_size")
     private Long fileSize;
