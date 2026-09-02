@@ -139,6 +139,10 @@ const ur: typeof en = {
     experienceYears: "تجربہ",
     profileViews: "پروفائل ملاحظات",
   },
+  backendWake: {
+    loading: "لوڈ ہو رہا ہے...",
+    pleaseWait: "براہ کرم کچھ دیر انتظار کریں...",
+  },
 };
 
 export default ur;

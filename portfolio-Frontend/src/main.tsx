@@ -5,6 +5,8 @@ import App from "./App.tsx";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
+import { BackendProvider } from "./contexts/BackendContext";
+import { BackendWakeGate } from "./components/common/BackendWakeGate";
 import "./styles/global.css";
 
 createRoot(document.getElementById("root")!).render(
@@ -13,7 +15,11 @@ createRoot(document.getElementById("root")!).render(
       <LanguageProvider>
         <BrowserRouter>
           <AuthProvider>
-            <App />
+            <BackendProvider>
+              <BackendWakeGate>
+                <App />
+              </BackendWakeGate>
+            </BackendProvider>
           </AuthProvider>
         </BrowserRouter>
       </LanguageProvider>

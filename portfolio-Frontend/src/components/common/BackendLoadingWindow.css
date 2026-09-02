@@ -1,0 +1,100 @@
+.backend-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-4);
+  background-color: var(--bg-0);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s var(--ease-out), visibility 0.4s var(--ease-out);
+}
+
+.backend-loading-overlay--done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.backend-loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-3);
+  max-width: 380px;
+  padding: var(--sp-7) var(--sp-6);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.backend-loading-spinner-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-2);
+}
+
+.backend-loading-spinner {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid rgba(108, 140, 255, 0.15);
+  border-top-color: var(--accent-500);
+  animation: spinNormal 0.9s linear infinite;
+}
+
+.backend-loading-spinner-inner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(155, 124, 246, 0.15);
+  border-bottom-color: var(--violet-500);
+  animation: spinNormal 1.4s linear infinite reverse;
+}
+
+@keyframes spinNormal {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.backend-loading-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--text-1);
+  margin: 0;
+}
+
+.backend-loading-desc {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  margin: 0;
+  line-height: var(--lh-normal);
+}
+
+.backend-loading-retry-btn {
+  margin-top: var(--sp-2);
+  padding: 8px 18px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: var(--bg-2);
+  color: var(--text-1);
+  border: 1px solid var(--border-strong);
+  cursor: pointer;
+  transition: all var(--dur-fast) ease;
+}
+
+.backend-loading-retry-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent-500);
+}

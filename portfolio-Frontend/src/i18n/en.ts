@@ -138,6 +138,10 @@ const en = {
     experienceYears: "Experience",
     profileViews: "Profile Views",
   },
+  backendWake: {
+    loading: "Loading...",
+    pleaseWait: "Please wait a moment...",
+  },
 };
 
 export default en;
