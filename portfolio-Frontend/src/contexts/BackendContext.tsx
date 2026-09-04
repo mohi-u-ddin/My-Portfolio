@@ -49,6 +49,8 @@ export function BackendProvider({ children }: { children: ReactNode }) {
   const activePollingRef = useRef<boolean>(false);
   const intervalTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const isWakingRef = useRef<boolean>(false);
+
   const stopTimers = useCallback(() => {
     if (intervalTimerRef.current) {
       clearInterval(intervalTimerRef.current);
@@ -56,28 +58,37 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const handleAwakeSuccess = useCallback(() => {
+  const handleAwakeSuccess = useCallback((wasVisibleWake = false) => {
     activePollingRef.current = false;
     stopTimers();
-    setIsReadyTransition(true);
 
     if (typeof window !== "undefined") {
       sessionStorage.setItem(SESSION_AWAKE_KEY, Date.now().toString());
     }
 
+    if (!wasVisibleWake && !isWakingRef.current) {
+      setIsAwake(true);
+      setIsWaking(false);
+      setIsReadyTransition(false);
+      return;
+    }
+
+    setIsReadyTransition(true);
+
     setTimeout(() => {
       setIsAwake(true);
-    }, 400);
+    }, 2300);
 
     setTimeout(() => {
       setIsWaking(false);
       setIsReadyTransition(false);
-    }, 800);
+      isWakingRef.current = false;
+    }, 2900);
   }, [stopTimers]);
 
   const skipToDemo = useCallback(() => {
     setUseMocks(true);
-    handleAwakeSuccess();
+    handleAwakeSuccess(true);
   }, [handleAwakeSuccess]);
 
   const startWakeLoop = useCallback(async () => {
@@ -97,10 +108,11 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     if (!activePollingRef.current) return;
 
     if (firstResult.isUp) {
-      handleAwakeSuccess();
+      handleAwakeSuccess(isWakingRef.current);
       return;
     }
 
+    isWakingRef.current = true;
     setIsWaking(true);
 
     while (activePollingRef.current) {
@@ -111,7 +123,7 @@ export function BackendProvider({ children }: { children: ReactNode }) {
       if (!activePollingRef.current) break;
 
       if (result.isUp) {
-        handleAwakeSuccess();
+        handleAwakeSuccess(true);
         break;
       }
     }
@@ -130,8 +142,15 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     if (forceWakePreview) {
       setIsAwake(false);
       setIsWaking(true);
-      startWakeLoop();
-      return;
+      isWakingRef.current = true;
+      const previewTimer = setTimeout(() => {
+        handleAwakeSuccess(true);
+      }, 3000);
+
+      return () => {
+        clearTimeout(previewTimer);
+        stopTimers();
+      };
     }
 
     if (USE_MOCKS) {
@@ -152,6 +171,7 @@ export function BackendProvider({ children }: { children: ReactNode }) {
     }
 
     let initialTimer: ReturnType<typeof setTimeout> | null = setTimeout(() => {
+      isWakingRef.current = true;
       setIsWaking(true);
     }, 300);
 
@@ -167,7 +187,7 @@ export function BackendProvider({ children }: { children: ReactNode }) {
       stopTimers();
       if (initialTimer) clearTimeout(initialTimer);
     };
-  }, [startWakeLoop, stopTimers]);
+  }, [handleAwakeSuccess, startWakeLoop, stopTimers]);
 
   return (
     <BackendContext.Provider
